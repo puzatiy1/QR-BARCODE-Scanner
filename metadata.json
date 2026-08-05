@@ -1,0 +1,6 @@
+{
+  "name": "QR & Barcode Scanner",
+  "description": "A premium, lightning-fast QR and Barcode scanner app built with CameraX, ML Kit, and Jetpack Compose. Includes real-time camera scanning, code actions (URLs, Wi-Fi, contacts), a scan history manager, and custom QR code generator.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

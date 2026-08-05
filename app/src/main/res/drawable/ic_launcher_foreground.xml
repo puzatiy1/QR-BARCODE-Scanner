@@ -1,0 +1,85 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- QR Code Brackets -->
+    <!-- Top Left -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 32 44 L 32 32 L 44 32" />
+        
+    <!-- Top Right -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 76 44 L 76 32 L 64 32" />
+
+    <!-- Bottom Left -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 32 64 L 32 76 L 44 76" />
+
+    <!-- Bottom Right -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38BDF8"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 76 64 L 76 76 L 64 76" />
+
+    <!-- QR Position Finder (Filled Square on Top Left) -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M 38 38 L 46 38 L 46 46 L 38 46 Z" />
+    <path
+        android:fillColor="#0F172A"
+        android:pathData="M 40 40 L 44 40 L 44 44 L 40 44 Z" />
+
+    <!-- Barcode Vertical Bars in background -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M 52 38 L 54 38 L 54 46 L 52 46 Z" />
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M 56 38 L 57 38 L 57 46 L 56 46 Z" />
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M 60 38 L 63 38 L 63 46 L 60 46 Z" />
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M 66 38 L 67 38 L 67 46 L 66 46 Z" />
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M 70 38 L 72 38 L 72 46 L 70 46 Z" />
+
+    <!-- Center Scanner Laser Line (Vibrant Emerald) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#10B981"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M 28 54 L 80 54" />
+
+    <!-- Scanner Laser Glow (Emerald transparent) -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#10B981"
+        android:strokeWidth="8"
+        android:strokeAlpha="0.3"
+        android:strokeLineCap="round"
+        android:pathData="M 30 54 L 78 54" />
+</vector>

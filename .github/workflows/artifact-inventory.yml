@@ -1,0 +1,79 @@
+name: Audit Actions artifact storage (read-only)
+
+on:
+  push:
+    branches:
+      - maintenance/artifact-inventory-20261113
+    paths:
+      - .github/workflows/artifact-inventory.yml
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inventory artifacts without deleting anything
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          from datetime import datetime, timezone
+          repo = os.environ['GH_REPOSITORY']
+          token = os.environ['GH_TOKEN']
+          artifacts = []
+          for page in range(1, 101):
+              url = f'https://api.github.com/repos/{repo}/actions/artifacts?per_page=100&page={page}'
+              request = urllib.request.Request(url, headers={
+                  'Authorization': f'Bearer {token}',
+                  'Accept': 'application/vnd.github+json',
+                  'X-GitHub-Api-Version': '2022-11-28'
+              })
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  data = json.load(response)
+              batch = data.get('artifacts', [])
+              for item in batch:
+                  artifacts.append({
+                      'id': item['id'],
+                      'name': item['name'],
+                      'size_in_bytes': item['size_in_bytes'],
+                      'created_at': item['created_at'],
+                      'expires_at': item.get('expires_at'),
+                      'expired': item.get('expired', False),
+                      'workflow_run_id': (item.get('workflow_run') or {}).get('id')
+                  })
+              if len(batch) < 100:
+                  break
+          report = {
+              'repository': repo,
+              'generated_at': datetime.now(timezone.utc).isoformat(),
+              'artifact_count': len(artifacts),
+              'total_bytes': sum(a['size_in_bytes'] for a in artifacts),
+              'artifacts': sorted(artifacts, key=lambda a: a['size_in_bytes'], reverse=True)
+          }
+          os.makedirs('maintenance', exist_ok=True)
+          with open('maintenance/artifact-inventory.json', 'w') as output:
+              json.dump(report, output, indent=2, ensure_ascii=False)
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
+              summary.write(f"## {repo} artifact inventory\n\n")
+              summary.write(f"Artifacts: {len(artifacts)}\n\n")
+              summary.write(f"Total: {report['total_bytes'] / 1048576:.1f} MiB\n\n")
+              summary.write('No artifacts were deleted.\n')
+          print(f"Found {len(artifacts)} artifacts, {report['total_bytes']} bytes")
+          PY
+      - name: Save inventory in this maintenance branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add maintenance/artifact-inventory.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: record Actions artifact inventory [skip ci]"
+            git push
+          fi
